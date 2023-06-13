@@ -4,7 +4,7 @@ import com.elka.composition.domain.entity.Question
 import com.elka.composition.domain.repository.GameRepository
 
 class GenerateQuestionUseCase(private val rep: GameRepository) {
-  operator fun invoke(maxSumValue: Int, countOfOptions: Int): Question =
+  operator fun invoke(maxSumValue: Int): Question =
     rep.generateQuestion(maxSumValue, COUNT_OF_OPTIONS)
 
   companion object {
