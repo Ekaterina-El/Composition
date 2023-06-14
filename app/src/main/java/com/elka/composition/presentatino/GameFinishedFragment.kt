@@ -12,7 +12,6 @@ import com.elka.composition.domain.entity.GameResult
 
 class GameFinishedFragment : Fragment() {
   private lateinit var binding: FragmentGameFinishedBinding
-  private lateinit var gameResult: GameResult
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -21,13 +20,9 @@ class GameFinishedFragment : Fragment() {
     return binding.root
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    parseArgs()
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    parseArgs()
     requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
       override fun handleOnBackPressed() { retry() }
     })
@@ -40,7 +35,7 @@ class GameFinishedFragment : Fragment() {
 
   private fun parseArgs() {
     requireArguments().getParcelable<GameResult>(GAME_RESULT_KEY)?.let {
-      gameResult = it
+      binding.gameResult = it
     }
   }
 

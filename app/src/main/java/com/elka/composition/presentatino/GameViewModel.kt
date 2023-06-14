@@ -71,7 +71,6 @@ class GameViewModel : ViewModel() {
     countOfQuestions = _countOfQuestions.value!!,
     countOfRightAnswers = _countOfRightAnswers.value!!,
     gameSettings = _gameSettings.value!!,
-    winner = (_countOfRightAnswers.value!! >= _gameSettings.value!!.minCountOfRightAnswers) &&
-        (_percentOfRight.value!! >= _gameSettings.value!!.minPercentOfRightAnswers)
+    percentOfRightAnswer = _percentOfRight.value!!,
   )
 }

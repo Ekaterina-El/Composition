@@ -5,8 +5,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class GameResult(
-  val winner: Boolean,
   val countOfRightAnswers: Int,
   val countOfQuestions: Int,
-  val gameSettings: GameSettings
-): Parcelable
+  val gameSettings: GameSettings,
+  val percentOfRightAnswer: Int
+) : Parcelable {
+  val winner: Boolean
+    get() = (countOfRightAnswers >= gameSettings.minCountOfRightAnswers)
+          && (percentOfRightAnswer >= gameSettings.minPercentOfRightAnswers)
+}
