@@ -24,4 +24,4 @@ fun updateProgressColor(progress: ProgressBar, percentOfRight: Int, minProgress:
   progress.progressDrawable.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
 }
 
-fun addZero(n: Int) = if (n < 0) "0$n" else n.toString()
+fun addZero(n: Int) = if (n < 10) "0$n" else n.toString()

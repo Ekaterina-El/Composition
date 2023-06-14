@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.elka.composition.R
+import androidx.navigation.fragment.findNavController
 import com.elka.composition.databinding.FragmentGameBinding
 import com.elka.composition.domain.entity.Level
 
@@ -57,17 +57,14 @@ class GameFragment : Fragment() {
   }
 
   private fun parseArgs() {
-    requireArguments().getParcelable<Level>(LEVEL_KEY)?.let {
-      level = it
-    }
+    val args = GameFragmentArgs.fromBundle(requireArguments())
+    level = args.level
   }
 
   private fun launchGameFinishedFragment() {
     val gameResult = viewModel.getGameResult()
-
-    requireActivity().supportFragmentManager.beginTransaction()
-      .replace(R.id.container, GameFinishedFragment.getInstance(gameResult)).addToBackStack(null)
-      .commit()
+    val dir = GameFragmentDirections.actionGameFragmentToGameFinishedFragment(gameResult)
+    findNavController().navigate(dir)
   }
 
   override fun onDestroyView() {
@@ -91,17 +88,5 @@ class GameFragment : Fragment() {
     viewModel.updateTime()
 
     handler.postDelayed({ updateTimer() }, 1000)
-  }
-
-  companion object {
-    const val NAME = "game_fragment"
-    private const val LEVEL_KEY = "level"
-    fun getInstance(level: Level): GameFragment {
-      return GameFragment().apply {
-        arguments = Bundle().apply {
-          putParcelable(LEVEL_KEY, level)
-        }
-      }
-    }
   }
 }

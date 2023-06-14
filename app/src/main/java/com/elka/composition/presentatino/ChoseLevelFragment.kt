@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.elka.composition.R
 import com.elka.composition.databinding.FragmentChoseLevelBinding
 import com.elka.composition.domain.entity.Level
@@ -31,15 +32,7 @@ class ChoseLevelFragment : Fragment() {
   }
 
   private fun launchGameFragment(level: Level) {
-    requireActivity().supportFragmentManager.beginTransaction()
-      .replace(R.id.container, GameFragment.getInstance(level)).addToBackStack(GameFragment.NAME).commit()
-  }
-
-  companion object {
-    const val name: String = "chose_level_fragment"
-
-    fun getInstance(): ChoseLevelFragment {
-      return ChoseLevelFragment()
-    }
+    val dir = ChoseLevelFragmentDirections.actionChoseLevelFragmentToGameFragment(level)
+    findNavController().navigate(dir)
   }
 }
