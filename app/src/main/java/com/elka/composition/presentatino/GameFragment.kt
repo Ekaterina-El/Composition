@@ -9,13 +9,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.elka.composition.R
-import com.elka.composition.data.GameRepositoryImpl
 import com.elka.composition.databinding.FragmentGameBinding
-import com.elka.composition.domain.entity.GameResult
 import com.elka.composition.domain.entity.Level
 
 class GameFragment : Fragment() {
-  private lateinit var viewModel: GameViewModel
+  private lateinit var level: Level
+
+  private val gameViewModelFactory by lazy {
+    GameViewModelFactory(requireActivity().application, level)
+  }
+  private val viewModel by lazy {
+    ViewModelProvider(this, gameViewModelFactory)[GameViewModel::class.java]
+  }
   private lateinit var binding: FragmentGameBinding
 
   private val handler by lazy { Handler(Looper.getMainLooper()) }
@@ -34,8 +39,6 @@ class GameFragment : Fragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    viewModel = ViewModelProvider(this)[GameViewModel::class.java]
     parseArgs()
   }
 
@@ -55,7 +58,7 @@ class GameFragment : Fragment() {
 
   private fun parseArgs() {
     requireArguments().getParcelable<Level>(LEVEL_KEY)?.let {
-      viewModel.setupLevel(it)
+      level = it
     }
   }
 
@@ -63,8 +66,7 @@ class GameFragment : Fragment() {
     val gameResult = viewModel.getGameResult()
 
     requireActivity().supportFragmentManager.beginTransaction()
-      .replace(R.id.container, GameFinishedFragment.getInstance(gameResult))
-      .addToBackStack(null)
+      .replace(R.id.container, GameFinishedFragment.getInstance(gameResult)).addToBackStack(null)
       .commit()
   }
 

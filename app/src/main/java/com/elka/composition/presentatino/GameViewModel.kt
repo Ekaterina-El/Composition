@@ -1,5 +1,7 @@
 package com.elka.composition.presentatino
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +13,10 @@ import com.elka.composition.domain.entity.Question
 import com.elka.composition.domain.usecases.GenerateQuestionUseCase
 import com.elka.composition.domain.usecases.GetGameSettingsUseCase
 
-class GameViewModel : ViewModel() {
+class GameViewModel(
+  private val application: Application,
+  private val level: Level,
+) : AndroidViewModel(application) {
   private val rep = GameRepositoryImpl
   private val generateQuestionUseCase = GenerateQuestionUseCase(rep)
   private val getGameSettings = GetGameSettingsUseCase(rep)
@@ -34,7 +39,10 @@ class GameViewModel : ViewModel() {
   private val _countOfRightAnswers = MutableLiveData(0)
   val countOfRightAnswers: LiveData<Int> get() = _countOfRightAnswers
 
-  fun setupLevel(level: Level) {
+  init {
+    setupGame()
+  }
+  private fun setupGame() {
     _gameSettings.value = getGameSettings(level)
     _time.value = _gameSettings.value!!.gameTimeInSeconds
     generateNewQuestion()
